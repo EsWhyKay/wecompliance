@@ -1,4 +1,4 @@
-# BC99 – Compliance Advice Around the World (Single-page Accordion)
+# WeCompliance (Single-page Accordion)
 
 ## What you get
 - `index.html`: the generated, searchable, single-page website (accordion list by country)
