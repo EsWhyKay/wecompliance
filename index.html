@@ -78,6 +78,15 @@
 
     .container { max-width: 1180px; margin: 0 auto 44px; padding: 0 16px; }
 
+    .section-title {
+      margin: 28px 0 16px;
+      padding: 4px 0;
+      font-weight: 800;
+      color: var(--accent);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
     .sheetcards {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -103,16 +112,8 @@
       flex: 0 0 auto;
     }
     .sheetcard .meta { min-width: 0; }
-    .sheetcard .t {
-      font-weight: 800;
-      color: var(--accent);
-      font-size: 16px;
-    }
-    .sheetcard .d {
-      margin-top: 6px;
-      color: var(--text-muted);
-      font-size: 13px;
-    }
+    .sheetcard .t { font-weight: 800; color: var(--accent); font-size: 16px; }
+    .sheetcard .d { margin-top: 6px; color: var(--text-muted); font-size: 13px; }
     .sheetcard:hover { box-shadow: 0 1px 0 rgba(0,0,0,0.05); }
 
     details.group {
@@ -158,6 +159,9 @@
       padding: 14px 16px 16px;
     }
 
+    /* Force-hide details content when collapsed to prevent blank reserved space */
+    details.country:not([open]) > .content { display: none !important; }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -185,7 +189,6 @@
     .status { display: inline-flex; gap: 8px; align-items: flex-start; }
     .status .ico { width: 18px; height: 18px; display: inline-flex; flex: 0 0 auto; margin-top: 1px; }
     .status .ico svg { width: 18px; height: 18px; display: block; }
-    .status .stxt { display: inline-block; }
 
     .ext { display: inline-flex; align-items: center; gap: 6px; }
     .ext svg { width: 14px; height: 14px; }
@@ -209,7 +212,7 @@
       gap: 12px;
     }
     @media (max-width: 900px) {
-      .grid, .links { grid-template-columns: 1fr; }
+      .grid, .links { grid-template-columns: 1fr !important; }
       .members { grid-template-columns: 1fr; }
       .sheetcards { grid-template-columns: 1fr; }
     }
@@ -251,17 +254,13 @@
   </header>
 
   <div class="topbar">
-    <div class="nav"><a class="active" href="index.html">Home</a><a class="" href="BC99.html">BC99</a><a class="" href="Akk11.html">Akk11</a></div>
+    <div class="nav"><a class="active" href="index.html">Home</a></div>
   </div>
 
-  <div class="controls">
-    <input id="search" placeholder="Search country or content…" oninput="filterList()" />
-    <button onclick="toggleAll(true)">Expand all</button>
-    <button onclick="toggleAll(false)">Collapse all</button>
-  </div>
+  
 
   <div class="container" id="container">
-    <div class="container">  <div class="sheetcards">    <a class="sheetcard" href="BC99.html">      <img class="img" src="assets/sheets/bc99.svg" alt="" onerror="this.onerror=null;this.src='assets/sheets/default.svg';">      <div class="meta">        <div class="t">BC99</div>        <div class="d">Open BC99 page</div>      </div>    </a>    <a class="sheetcard" href="Akk11.html">      <img class="img" src="assets/sheets/akk11.svg" alt="" onerror="this.onerror=null;this.src='assets/sheets/default.svg';">      <div class="meta">        <div class="t">Akk11</div>        <div class="d">Open Akk11 page</div>      </div>    </a>  </div></div>
+    <div class="section-title">WecLac菌株全球合规性</div><div class="sheetcards"><a class="sheetcard" href="BC99.html"><img class="img" src="assets/sheets/bc99.svg" alt="" onerror="this.onerror=null;this.src='assets/sheets/default.svg';"><div class="meta"><div class="t">BC99</div><div class="d"><i>Bacillus coagulans</i> / <i>Weizmannia coagulans</i> / <i>Heyndrickxia coagulans</i></div></div></a><a class="sheetcard" href="Akk11.html"><img class="img" src="assets/sheets/akk11.svg" alt="" onerror="this.onerror=null;this.src='assets/sheets/default.svg';"><div class="meta"><div class="t">Akk11</div><div class="d"><i>Akkermansia muciniphila</i></div></div></a></div><div class="section-title">国际菌株对比</div><div class="sheetcards"><a class="sheetcard" href="compare-BC99.html"><img class="img" src="assets/sheets/bc99.svg" alt="" onerror="this.onerror=null;this.src='assets/sheets/default.svg';"><div class="meta"><div class="t">BC99</div><div class="d"><i>Bacillus coagulans</i> / <i>Weizmannia coagulans</i> / <i>Heyndrickxia coagulans</i></div></div></a><a class="sheetcard" href="compare-BLa80.html"><img class="img" src="assets/sheets/bla80.svg" alt="" onerror="this.onerror=null;this.src='assets/sheets/default.svg';"><div class="meta"><div class="t">BLa80</div><div class="d"><i>Bifidobacterium animalis</i> subsp. <i>lactis</i></div></div></a><a class="sheetcard" href="compare-LRa05.html"><img class="img" src="assets/sheets/lra05.svg" alt="" onerror="this.onerror=null;this.src='assets/sheets/default.svg';"><div class="meta"><div class="t">LRa05</div><div class="d"><i>Lacticaseibacillus rhamnosus</i></div></div></a></div>
   </div>
 
   <footer>
@@ -271,11 +270,20 @@
 
   <script>
     function toggleAll(open) {
-      document.querySelectorAll('details.group, details.country').forEach(d => d.open = open);
+      const countries = document.querySelectorAll('details.country');
+      const groups = document.querySelectorAll('details.group');
+      if (open) {
+        groups.forEach(g => { g.open = true; g.setAttribute('open',''); });
+        countries.forEach(c => { c.open = true; c.setAttribute('open',''); });
+      } else {
+        // Close children first to avoid layout glitches in some browsers
+        countries.forEach(c => { c.open = false; c.removeAttribute('open'); });
+        groups.forEach(g => { g.open = false; g.removeAttribute('open'); });
+      }
     }
 
     function filterList() {
-      const q = (document.getElementById('search').value || '').toLowerCase().trim();
+      const q = (document.getElementById('search')?.value || '').toLowerCase().trim();
       const groups = document.querySelectorAll('details.group');
 
       groups.forEach(g => {
@@ -291,6 +299,19 @@
         if (q && anyVisible) g.open = true;
       });
     }
+
+    // Ensure region expansion does not auto-expand all countries after a global collapse.
+    document.addEventListener('click', function(e){
+      const sum = e.target.closest('details.group > summary');
+      if(!sum) return;
+      const g = sum.parentElement;
+      // When a region is opened by user click, collapse all its country items by default.
+      setTimeout(()=>{
+        if(g && g.open){
+          g.querySelectorAll('details.country').forEach(c=>{c.open=false; c.removeAttribute('open');});
+        }
+      }, 0);
+    });
   </script>
 </body>
 </html>
