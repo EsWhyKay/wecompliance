@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WeCompliance</title>
+  <style>
+    :root {
+      --bg-main: #f4f1ec;
+      --bg-card: #fbfaf7;
+      --bg-expand: #ffffff;
+      --border-soft: #ddd6cc;
+      --text-main: #2f2f2f;
+      --text-muted: #746f67;
+      --accent: #7c6c55;
+      --link: #5f5342;
+      --chip: #efe9df;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg-main);
+      color: var(--text-main);
+    }
+    header { text-align: center; padding: 28px 16px 10px; }
+    header h1 { margin: 0; font-size: 36px; letter-spacing: 1px; }
+    header h2 { margin: 10px 0 0; font-size: 15px; font-weight: 400; color: var(--text-muted); }
+
+    .topbar { max-width: 1180px; margin: 0 auto; padding: 10px 16px 0; }
+    .nav {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      justify-content: center;
+      margin: 8px 0 14px;
+    }
+    .nav a {
+      display: inline-block;
+      padding: 8px 12px;
+      border: 1px solid var(--border-soft);
+      background: var(--bg-card);
+      border-radius: 999px;
+      text-decoration: none;
+      color: var(--accent);
+      font-size: 13px;
+    }
+    .nav a.active {
+      background: var(--chip);
+      font-weight: 600;
+    }
+
+    .controls {
+      max-width: 1180px;
+      margin: 0 auto 14px;
+      padding: 0 16px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .controls input {
+      flex: 1;
+      min-width: 240px;
+      padding: 10px 12px;
+      border: 1px solid var(--border-soft);
+      border-radius: 10px;
+      background: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+    .controls button {
+      padding: 10px 14px;
+      border: 1px solid var(--border-soft);
+      background: var(--bg-card);
+      border-radius: 10px;
+      cursor: pointer;
+      color: var(--accent);
+      font-size: 13px;
+    }
+
+    .container { max-width: 1180px; margin: 0 auto 44px; padding: 0 16px; }
+
+    .section-title {
+      margin: 28px 0 16px;
+      padding: 4px 0;
+      font-weight: 800;
+      color: var(--accent);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .sheetcards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .sheetcard {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 14px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      border-radius: 14px;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+    .sheetcard .img {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid var(--border-soft);
+      background: #fff;
+      flex: 0 0 auto;
+    }
+    .sheetcard .meta { min-width: 0; }
+    .sheetcard .t { font-weight: 800; color: var(--accent); font-size: 16px; }
+    .sheetcard .d { margin-top: 6px; color: var(--text-muted); font-size: 13px; }
+    .sheetcard:hover { box-shadow: 0 1px 0 rgba(0,0,0,0.05); }
+
+    details.group {
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      border-radius: 14px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    details.group > summary {
+      padding: 14px 16px;
+      cursor: pointer;
+      list-style: none;
+      font-weight: 700;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    details.group > summary::-webkit-details-marker { display: none; }
+    .badge { font-size: 12px; color: var(--text-muted); background: var(--chip); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border-soft); }
+
+    details.country {
+      background: transparent;
+      border-top: 1px solid var(--border-soft);
+    }
+    details.country > summary {
+      padding: 12px 16px;
+      font-size: 15px;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    details.country > summary::-webkit-details-marker { display: none; }
+
+    .content {
+      background: var(--bg-expand);
+      border-top: 1px solid var(--border-soft);
+      padding: 14px 16px 16px;
+    }
+
+    /* Force-hide details content when collapsed to prevent blank reserved space */
+    details.country:not([open]) > .content { display: none !important; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      font-size: 13.5px;
+    }
+    .cell-title { font-weight: 700; color: var(--accent); }
+    .cell { line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
+
+    .links {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border-soft);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      align-items: start;
+    }
+
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .status { display: inline-flex; gap: 8px; align-items: flex-start; }
+    .status .ico { width: 18px; height: 18px; display: inline-flex; flex: 0 0 auto; margin-top: 1px; }
+    .status .ico svg { width: 18px; height: 18px; display: block; }
+
+    .ext { display: inline-flex; align-items: center; gap: 6px; }
+    .ext svg { width: 14px; height: 14px; }
+
+    footer {
+      max-width: 1180px;
+      margin: 0 auto 64px;
+      padding: 0 16px;
+      color: var(--text-muted);
+    }
+    .team {
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    .team h3 { margin: 0 0 12px; color: var(--accent); font-size: 16px; }
+    .members {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    @media (max-width: 900px) {
+      .grid, .links { grid-template-columns: 1fr !important; }
+      .members { grid-template-columns: 1fr; }
+      .sheetcards { grid-template-columns: 1fr; }
+    }
+
+    .member {
+      background: #fff;
+      border: 1px solid var(--border-soft);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      border: 1px solid var(--border-soft);
+      overflow: hidden;
+      background: var(--bg-main);
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .mmeta { font-size: 13px; }
+    .mmeta .name { font-weight: 700; color: var(--text-main); }
+    .mmeta .roleline { color: var(--accent); font-size: 12px; margin-top: 4px; line-height: 1.5; }
+    .mmeta .roleline a { color: var(--link); }
+    .mmeta .sep { color: var(--border-soft); padding: 0 6px; }
+
+    .hint { text-align: center; color: var(--text-muted); font-size: 12px; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>WeCompliance</h1>
+    <h2>Probiotics Compliance Advice Around the World</h2>
+  </header>
+
+  <div class="topbar">
+    <div class="nav"><a class="active" href="index.html">Home</a></div>
+  </div>
+
+  
+
+  <div class="container" id="container">
+    <div class="section-title">WecLac菌株全球合规性</div><div class="sheetcards"><a class="sheetcard" href="BC99.html"><img class="img" src="assets/sheets/bc99.svg" alt="" onerror="this.onerror=null;this.src='assets/sheets/default.svg';"><div class="meta"><div class="t">BC99</div><div class="d"><i>Bacillus coagulans</i> / <i>Weizmannia coagulans</i> / <i>Heyndrickxia coagulans</i></div></div></a><a class="sheetcard" href="Akk11.html"><img class="img" src="assets/sheets/akk11.svg" alt="" onerror="this.onerror=null;this.src='assets/sheets/default.svg';"><div class="meta"><div class="t">Akk11</div><div class="d"><i>Akkermansia muciniphila</i></div></div></a></div><div class="section-title">国际菌株对比</div><div class="sheetcards"><a class="sheetcard" href="compare-BC99.html"><img class="img" src="assets/sheets/bc99.svg" alt="" onerror="this.onerror=null;this.src='assets/sheets/default.svg';"><div class="meta"><div class="t">BC99</div><div class="d"><i>Bacillus coagulans</i> / <i>Weizmannia coagulans</i> / <i>Heyndrickxia coagulans</i></div></div></a><a class="sheetcard" href="compare-BLa80.html"><img class="img" src="assets/sheets/bla80.svg" alt="" onerror="this.onerror=null;this.src='assets/sheets/default.svg';"><div class="meta"><div class="t">BLa80</div><div class="d"><i>Bifidobacterium animalis</i> subsp. <i>lactis</i></div></div></a><a class="sheetcard" href="compare-LRa05.html"><img class="img" src="assets/sheets/lra05.svg" alt="" onerror="this.onerror=null;this.src='assets/sheets/default.svg';"><div class="meta"><div class="t">LRa05</div><div class="d"><i>Lacticaseibacillus rhamnosus</i></div></div></a></div>
+  </div>
+
+  <footer>
+    <div class="team"><h3>Team</h3><div class="members"><div class="member"><div class="avatar"><img src="assets/photos/xiaowen.wang.svg" alt="Xiaowen Wang" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><rect width='100%25' height='100%25' rx='18' ry='18' fill='%23f4f1ec'/><circle cx='60' cy='48' r='18' fill='%23ddd6cc'/><rect x='26' y='74' width='68' height='30' rx='15' fill='%23ddd6cc'/></svg>';" /></div><div class="mmeta"><div class="name">Xiaowen Wang</div><div class="roleline">Consultant, Eurasian Plate<br><a href="mailto:xiaowen.wang@wecare-bio.com">xiaowen.wang@wecare-bio.com</a></div></div></div><div class="member"><div class="avatar"><img src="assets/photos/kay.sun.svg" alt="Yukun Sun" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><rect width='100%25' height='100%25' rx='18' ry='18' fill='%23f4f1ec'/><circle cx='60' cy='48' r='18' fill='%23ddd6cc'/><rect x='26' y='74' width='68' height='30' rx='15' fill='%23ddd6cc'/></svg>';" /></div><div class="mmeta"><div class="name">Yukun Sun</div><div class="roleline">Manager, Pacific Plate<br><a href="mailto:kay.sun@wecare-life.com">kay.sun@wecare-life.com</a> <span class="sep">·</span> <a href="http://www.linkedin.com/in/yu-kun-sun" target="_blank" rel="noopener">LinkedIn</a></div></div></div><div class="member"><div class="avatar"><img src="assets/photos/yixuan.fan.svg" alt="Yixuan Fan" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><rect width='100%25' height='100%25' rx='18' ry='18' fill='%23f4f1ec'/><circle cx='60' cy='48' r='18' fill='%23ddd6cc'/><rect x='26' y='74' width='68' height='30' rx='15' fill='%23ddd6cc'/></svg>';" /></div><div class="mmeta"><div class="name">Yixuan Fan</div><div class="roleline">Consultant, American Plate<br><a href="mailto:yixuan.fan@wecare-bio.com">yixuan.fan@wecare-bio.com</a></div></div></div></div></div>
+    <div class="hint">If you have any questions, please contact us.</div>
+  </footer>
+
+  <script>
+    function toggleAll(open) {
+      const countries = document.querySelectorAll('details.country');
+      const groups = document.querySelectorAll('details.group');
+      if (open) {
+        groups.forEach(g => { g.open = true; g.setAttribute('open',''); });
+        countries.forEach(c => { c.open = true; c.setAttribute('open',''); });
+      } else {
+        // Close children first to avoid layout glitches in some browsers
+        countries.forEach(c => { c.open = false; c.removeAttribute('open'); });
+        groups.forEach(g => { g.open = false; g.removeAttribute('open'); });
+      }
+    }
+
+    function filterList() {
+      const q = (document.getElementById('search')?.value || '').toLowerCase().trim();
+      const groups = document.querySelectorAll('details.group');
+
+      groups.forEach(g => {
+        let anyVisible = false;
+        const countries = g.querySelectorAll('details.country');
+        countries.forEach(c => {
+          const hay = (c.getAttribute('data-hay') || '').toLowerCase();
+          const show = (!q) || hay.includes(q);
+          c.style.display = show ? '' : 'none';
+          if (show) anyVisible = true;
+        });
+        g.style.display = anyVisible ? '' : 'none';
+        if (q && anyVisible) g.open = true;
+      });
+    }
+
+    // Ensure region expansion does not auto-expand all countries after a global collapse.
+    document.addEventListener('click', function(e){
+      const sum = e.target.closest('details.group > summary');
+      if(!sum) return;
+      const g = sum.parentElement;
+      // When a region is opened by user click, collapse all its country items by default.
+      setTimeout(()=>{
+        if(g && g.open){
+          g.querySelectorAll('details.country').forEach(c=>{c.open=false; c.removeAttribute('open');});
+        }
+      }, 0);
+    });
+  </script>
+</body>
+</html>
