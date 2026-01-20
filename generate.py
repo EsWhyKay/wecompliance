@@ -484,7 +484,7 @@ def html_shell(page_title: str, subtitle: str, nav_html: str, body_html: str, te
 
   <footer>
     __TEAM__
-    <div class="hint">Photos: place files in <b>assets/photos/</b> named <b>xiaowen.wang.svg</b>, <b>yixuan.fan.svg</b>, <b>kay.sun.svg</b> (svg/png/jpg). Missing photos will show a placeholder.</div>
+    <div class="hint">If you have any questions, please contact us.</div>
   </footer>
 
   <script>
